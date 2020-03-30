@@ -5,10 +5,10 @@ This is a simple Python code evaluating the distribution of CoVid-19 for two dif
 
 ## What does it compute?
 
-**Infected** Computes the number of infected population.
-**Non-infected** Computes the number of non-infected population.
-**Immune** Computes the number of immune population.
-**Deths** Computes the number of deaths.
+- **Infected** - Computes the number of infected population.
+- **Non-infected** - Computes the number of non-infected population.
+- **Immune** - Computes the number of immune population.
+- **Deths** - Computes the number of deaths.
 
 ## Comparison with real data
 It is possible to compare with real data from worldometer.
