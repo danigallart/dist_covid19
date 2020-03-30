@@ -13,5 +13,5 @@ This is a simple Python code evaluating the distribution of CoVid-19 for two dif
 ## Comparison with real data
 It is possible to compare with real data from worldometer.
 
-email:  dani.gallart-gmail.com
+Authors: dani.gallart@gmail.com and jeanbaptiste.favre@hotmail.fr
 
