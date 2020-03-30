@@ -1,4 +1,4 @@
-# dani.gallart-gmail.com
+ dani.gallart-gmail.com
 
 <p style="text-align:center"><span style="font-weight:bold">CoVid-19 distributiontext</span></p>
 
