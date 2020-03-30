@@ -7,7 +7,7 @@ This is a simple Python code evaluating the distribution of CoVid-19 for two dif
 The code is organised in 3 directories:
 - **src** - This is where the source code is.
 - **bc** - This is where the boundary conditions are.
-- **real_data** This directory contains a file with real Spanish data for total CoVid-19 cases.
+- **real_data** - This directory contains a file with real Spanish data for total CoVid-19 cases.
 ## What does it compute?
 
 - **Infected** - Computes the number of infected population.
