@@ -32,9 +32,9 @@ confinement_alpha = ic.confinement_alpha
 # Load experimental data for comparison with the model
 experimental = np.loadtxt('..\\real_data\\Spain_Corona.txt')
 
-for i in range(1,days_2 - (len(experimental) - 1)):
-    if len(experimental) <= days_2:
-        experimental = np.append(experimental,0.)
+
+while len(experimental) < days_2: 
+    experimental = np.append(experimental,0.)
 
 # First model based on a speading factor of CoVid-19
 def factor(i): 
