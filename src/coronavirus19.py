@@ -22,19 +22,7 @@ experimental = np.loadtxt(os.path.join('..', 'real_data', 'Spain_Corona.txt'))
 
 for i in range(1, config.days - (len(experimental) - 1)):
     if len(experimental) <= config.days:
-        experimental = np.append(experimental,0.)
-
-# First model based on a speading factor of CoVid-19
-def factor(i):
-    """Model that takes into account a linear decrease
-       of the spreading factor of Covid-19."""
-    if i < config.k + 1:
-        factor = config.f / config.population * (healthy[i] - config.population) + config.f
-    elif i >= config.k + 1:
-        factor = (config.f / config.confinement_factor)
-        factor = factor / config.population * (healthy[i] - config.population) + config.f
-        factor = factor / config.confinement_factor
-    return factor
+        experimental = np.append(experimental, 0.)
 
 # Second model based on probability and combination theory
 def combination(a,b,c,d):
