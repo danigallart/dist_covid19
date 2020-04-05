@@ -10,41 +10,30 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-import initialconditions as ic
+from initialconditions import Config
 
-#IMPORTING CONSTANTS FROM initialconditions module
-#Refer to the module for a description of each value
+# IMPORTING CONSTANTS FROM initialconditions module
+# Refer to the module for a description of each value
+config = Config()
 
-f          = ic.f
-k          = ic.k
-first_ill  = ic.first_ill
-days_2     = ic.days_2
-days       = ic.days
-alpha      = ic.alpha
-alpha2     = alpha
-beta       = ic.beta
-death_rate = ic.death_rate
-population = ic.population
-
-# Confinement factors for the two models
-confinement_factor = ic.confinement_factor
-confinement_alpha = ic.confinement_alpha
 
 # Load experimental data for comparison with the model
 experimental = np.loadtxt(os.path.join('..', 'real_data', 'Spain_Corona.txt'))
 
-for i in range(1,days_2 - (len(experimental) - 1)):
-    if len(experimental) <= days_2:
+for i in range(1, config.days - (len(experimental) - 1)):
+    if len(experimental) <= config.days:
         experimental = np.append(experimental,0.)
 
 # First model based on a speading factor of CoVid-19
 def factor(i):
     """Model that takes into account a linear decrease
        of the spreading factor of Covid-19."""
-    if i < k + 1:
-        factor = f/population * (healthy[i] - population) + f
-    elif i >= k + 1:
-        factor = (f / confinement_factor) / population * (healthy[i] - population) + f / confinement_factor
+    if i < config.k + 1:
+        factor = config.f / config.population * (healthy[i] - config.population) + config.f
+    elif i >= config.k + 1:
+        factor = (config.f / config.confinement_factor)
+        factor = factor / config.population * (healthy[i] - config.population) + config.f
+        factor = factor / config.confinement_factor
     return factor
 
 # Second model based on probability and combination theory
@@ -57,49 +46,51 @@ def combination(a,b,c,d):
     return combination
 
 # Initialisation of arrays
-healthy     = np.zeros(days_2) # Total number of healthy people at t = t_i
-infected    = np.zeros(days_2) # Total number of infected people at t = t_i
-immune      = np.zeros(days_2) # Total number of immune people at t = t_i
-deaths      = np.zeros(days_2) # Total number of deaths up to t = t_i
-total_cases = np.zeros(days_2) # Total number of cases of CoVid-19 up to t = t_i
+healthy     = np.zeros(config.days) # Total number of healthy people at t = t_i
+infected    = np.zeros(config.days) # Total number of infected people at t = t_i
+immune      = np.zeros(config.days) # Total number of immune people at t = t_i
+deaths      = np.zeros(config.days) # Total number of deaths up to t = t_i
+total_cases = np.zeros(config.days) # Total number of cases of CoVid-19 up to t = t_i
 
-infected[0] = first_ill
-healthy[0]  = population - infected[0] - immune[0]
+infected[0] = config.first_ill
+healthy[0]  = config.population - infected[0] - immune[0]
 
-#CALCULATIONS FOR COVID-19 DISTRIBUTION
-for i in range(1,days_2):
+# CALCULATIONS FOR COVID-19 DISTRIBUTION
+for i in range(1, config.days):
 
-#    healthy[i] = -infected[i-1]*factor(i-1) + healthy[i-1] # First model based on CoVid-19 spreading factor
-    if i > k:
-        alpha2 = int(alpha/confinement_alpha)
-    healthy[i] = (1 -beta * (1 - combination(immune[i-1], healthy[i-1], infected[i-1], alpha2))) * healthy[i-1] # Second model based on probabilistic theory
-#    healthy[i] = -alpha*population/2.0*beta/population**2*healthy[i-1]*infected[i-1]+healthy[i-1] # This model is certainly wrong ...
+    if i > config.k:
+        alpha2 = int(config.alpha / config.confinement_alpha)
+    healthy[i] = (1 - config.beta * (1 - combination(immune[i-1], healthy[i-1], infected[i-1], config.alpha))) * healthy[i-1] # Second model based on probabilistic theory
     total_cases[i] = healthy[i-1] - healthy[i] + total_cases[i-1]
     if healthy[i] > 0:
-        if i == k:
-            immune[i] = first_ill
-        elif i > k:
-            deaths[i] = -(healthy[i-k] - healthy[i-(k+1)]) * (death_rate) + deaths[i-1]
-            immune[i] = -(healthy[i-k] - healthy[i-(k+1)]) * (1.-death_rate) + immune[i-1]
-        infected[i] = -(healthy[i]-healthy[i-1]) - (immune[i] + deaths[i] - (immune[i-1]+deaths[i-1])) + infected[i-1]
+        if i == config.k:
+            immune[i] = config.first_ill
+        elif i > config.k:
+            deaths[i] = -(healthy[i - config.k] - healthy[i-(config.k + 1)]) * (config.death_rate) + deaths[i - 1]
+            immune[i] = -(healthy[i - config.k] - healthy[i - (config.k + 1)]) * (1. - config.death_rate) + immune[i - 1]
 
-plt.ylim(0, 86000)
-plt.xlim(0,33)
+        infected[i] = -(healthy[i]-healthy[i - 1]) - (immune[i] + deaths[i] - (immune[i - 1]+deaths[i - 1])) + infected[i - 1]
 
-#plt.plot(days,r, label = 'infected')
-#plt.plot(days,b, label = 'immune')
-#plt.plot(days,n, label = 'healthy')
-#plt.plot(days,deaths, label = 'Deaths')
-plt.plot(days,total_cases, label = 'Total cases')
-plt.plot(days,experimental, label = 'Total cases_experimental')
+plt.ylim(0, config.plot_y_lim)
+plt.xlim(0, config.plot_x_lim)
+
+if config.plot_infected:
+    plt.plot(range(0, config.days), infected, label='infected')
+
+if config.plot_immune:
+    plt.plot(range(0, config.days), immune, label='immune')
+
+if config.plot_healthy:
+    plt.plot(range(0, config.days), healthy, label='healthy')
+
+if config.plot_deaths:
+    plt.plot(range(0, config.days), deaths, label='Deaths')
+
+if config.plot_total_cases:
+    plt.plot(range(0, config.days), total_cases, label='Total cases')
+
+if config.plot_total_cases_experimental:
+    plt.plot(range(0, config.days), experimental, label='Total cases_experimental')
+
 plt.legend()
 plt.show()
-
-
-#for i in range(0,399):
-#    print(immune[i])
-
-
-
-
-
