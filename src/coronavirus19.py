@@ -56,11 +56,11 @@ infected[0] = config.first_ill
 healthy[0]  = config.population - infected[0] - immune[0]
 
 # CALCULATIONS FOR COVID-19 DISTRIBUTION
+alpha2 = config.alpha
 for i in range(1, config.days):
-
     if i > config.k:
         alpha2 = int(config.alpha / config.confinement_alpha)
-    healthy[i] = (1 - config.beta * (1 - combination(immune[i-1], healthy[i-1], infected[i-1], config.alpha))) * healthy[i-1] # Second model based on probabilistic theory
+    healthy[i] = (1 - config.beta * (1 - combination(immune[i-1], healthy[i-1], infected[i-1], alpha2))) * healthy[i-1] # Second model based on probabilistic theory
     total_cases[i] = healthy[i-1] - healthy[i] + total_cases[i-1]
     if healthy[i] > 0:
         if i == config.k:
