@@ -1,25 +1,25 @@
 ################################################################################
 #                        COVID-19 DISTRIBUTION MODEL
-#                    By Jean-Baptiste Favre & Dani Gallart 
+#                    By Jean-Baptiste Favre & Dani Gallart
 #                                 24/03/2020
 ################################################################################
 
 import sys
-sys.path.append('..\bc\initialconditions')
 
 import numpy as np
 import matplotlib.pyplot as plt
+
 import initialconditions as ic
 
 #IMPORTING CONSTANTS FROM initialconditions module
 #Refer to the module for a description of each value
 
 f          = ic.f
-k          = ic.k      
+k          = ic.k
 first_ill  = ic.first_ill
 days_2     = ic.days_2
-days       = ic.days 
-alpha      = ic.alpha 
+days       = ic.days
+alpha      = ic.alpha
 alpha2     = alpha
 beta       = ic.beta
 death_rate = ic.death_rate
@@ -37,7 +37,7 @@ for i in range(1,days_2 - (len(experimental) - 1)):
         experimental = np.append(experimental,0.)
 
 # First model based on a speading factor of CoVid-19
-def factor(i): 
+def factor(i):
     """Model that takes into account a linear decrease
        of the spreading factor of Covid-19."""
     if i < k + 1:
@@ -48,14 +48,14 @@ def factor(i):
 
 # Second model based on probability and combination theory
 def combination(a,b,c,d):
-    """Model that takes into account a combination of 
+    """Model that takes into account a combination of
        all possible people that you can meet every day"""
     combination = 1.0
     for i in range(0,d):
         combination = (float((round(a + b) - i)) / float((round(a + b + c) - i))) * combination
     return combination
 
-# Initialisation of arrays 
+# Initialisation of arrays
 healthy     = np.zeros(days_2) # Total number of healthy people at t = t_i
 infected    = np.zeros(days_2) # Total number of infected people at t = t_i
 immune      = np.zeros(days_2) # Total number of immune people at t = t_i
@@ -80,7 +80,7 @@ for i in range(1,days_2):
         elif i > k:
             deaths[i] = -(healthy[i-k] - healthy[i-(k+1)]) * (death_rate) + deaths[i-1]
             immune[i] = -(healthy[i-k] - healthy[i-(k+1)]) * (1.-death_rate) + immune[i-1]
-        infected[i] = -(healthy[i]-healthy[i-1]) - (immune[i] + deaths[i] - (immune[i-1]+deaths[i-1])) + infected[i-1] 
+        infected[i] = -(healthy[i]-healthy[i-1]) - (immune[i] + deaths[i] - (immune[i-1]+deaths[i-1])) + infected[i-1]
 
 plt.ylim(0, 86000)
 plt.xlim(0,33)
