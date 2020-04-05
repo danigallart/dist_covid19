@@ -4,6 +4,7 @@
 #                                 24/03/2020
 ################################################################################
 
+import os
 import sys
 
 import numpy as np
@@ -30,7 +31,7 @@ confinement_factor = ic.confinement_factor
 confinement_alpha = ic.confinement_alpha
 
 # Load experimental data for comparison with the model
-experimental = np.loadtxt('..\\real_data\\Spain_Corona.txt')
+experimental = np.loadtxt(os.path.join('..', 'real_data', 'Spain_Corona.txt'))
 
 for i in range(1,days_2 - (len(experimental) - 1)):
     if len(experimental) <= days_2:
