@@ -13,8 +13,10 @@ from models import CombinationAndProbabilityModel
 
 
 def plot(config, model):
-    plt.ylim(0, config.plot_y_lim)
-    plt.xlim(0, config.plot_x_lim)
+    for i in range(1, config.days):
+        if model.experimental[i - 1] != 0.:
+            plt.ylim(0, model.experimental[i - 1])
+            plt.xlim(0, i - 1)
 
     if config.plot_infected:
         plt.plot(range(0, config.days), model.infected, label='infected')
