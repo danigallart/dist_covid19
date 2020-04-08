@@ -1,0 +1,20 @@
+{
+    "f": 0.235714,
+    "k": 14,
+    "first_ill": 10,
+    "days": 400,
+    "population": 45000000,
+    "alpha": 45,
+    "beta": 0.0098,
+    "death_rate": 0.03,
+    "confinement_factor": 1,
+    "confinement_alpha": 1.85,
+    "plot_infected": false,
+    "plot_immune": false,
+    "plot_healthy": false,
+    "plot_deaths": false,
+    "plot_total_cases": true,
+    "plot_total_cases_experimental": true,
+    "plot_y_lim": 86000,
+    "plot_x_lim": 33
+}
